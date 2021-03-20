@@ -1,0 +1,34 @@
+{% extends 'products/base.html' %}
+<div class='container lp-4 lm-4'>
+{% block body_block %}
+<h1>Cart</h1>
+
+
+{% if objects.item.exists %}
+<table class="table">
+ 
+  <tbody>
+  	{% for obj in objects.item.all %} 
+    <tr>
+      <th scope="row">{{ obj.title }}   {% include 'snippets/cart.html' with object=object cart=cart %}</th>
+      <td>{{ obj.price }} Rs.</td>
+    </tr>
+    {% endfor %}
+</tbody>
+<tr>
+	<th></th>
+</tr>
+   <tr>
+   	
+   	<th>Total</th>
+   	<th>{{ objects.total }} Rs.</th>
+   </tr>
+    
+  
+</table>
+{% else %}
+<h1>Cart is empty</h1>
+{% endif %}
+</div>
+{% endblock body_block %}
+

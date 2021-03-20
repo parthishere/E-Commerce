@@ -1,0 +1,59 @@
+{% url 'products:list-cbv' as home_url %}
+{% url 'products:contact-us' as contact_url %}
+{% url 'products:logout' as logout_url %}
+{% url 'admin' as admin_url %}
+{% url 'products:login' as login_url %}
+{% url 'products:signup' as signup_url %}
+{% url 'cart:cart-home' as cart_url %}
+
+{{ brand_name }}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item {% if request.path == home_url %}active{% else %}{% endif %}">
+        <a class="nav-link" href="{{ home_url }}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item {% if request.path == contact_url %}active{% else %}{% endif %}">
+        <a class="nav-link" href="{{ contact_url }}">Contact</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item {% if request.path == admin_url %}active{% else %}{% endif %}">
+        <a class="nav-link" href="/admin" tabindex="-1" aria-disabled="true">Admin</a>
+      </li>
+      {% if request.user.is_authenticated %}
+      <li class="nav-item {% if request.path == logout_url %}active{% else %}{% endif %}">
+        <a class="nav-link" href="{{ logout_url }}" tabindex="-1" aria-disabled="true">Log Out</a>
+      </li>
+      {% else %}
+      <li class="nav-item {% if request.path == login_url %}active{% else %}{% endif %}">
+        <a class="nav-link" href="{{ login_url }}" tabindex="-1" aria-disabled="true">Log In</a>
+      </li>
+      <li class="nav-item {% if request.path == sign %}active{% else %}{% endif %}">
+        <a class="nav-link" href="{{ signup_url }}" tabindex="-1" aria-disabled="true">Sign Up</a>
+      </li>
+
+      {% endif %}
+      <li class="nav-item {% if request.path == cart_url %}active{% else %}{% endif %} ml-3">
+        <a class="nav-link" href="{{ cart_url }}" tabindex="-1" aria-disabled="true">{{ request.session.cart_item_number }}   <i class="fas fa-shopping-cart"></i></a>
+  
+      </li>
+    </ul>
+    {% include 'snippets/search.html '%}
+  </div>
+</nav>

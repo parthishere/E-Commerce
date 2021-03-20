@@ -1,0 +1,50 @@
+{% extends 'products/base.html' %}
+
+
+
+
+{% block body_block %}
+<div class='container'> 
+{% if request.GET.q %}
+<div class='container mt-3'>
+<center>
+<span class="align-middle"><h3>Result(s) for <b>{{ request.GET.q }}</b></h3></span>
+<div class='container'>
+<hr>
+</div>
+</center>
+</div>
+
+{% endif %}
+<div class='row'>
+{% for obj in object_list %}
+
+<div class='col-md-3 col-sm-6'>
+
+<a class='card-link py-4 m-4' href='{{ obj.get_absolute_url }}'>
+  
+  <div class="card" style="width: 18rem;" >
+
+    <img src='{{ obj.image.url }}', class='img-fluid'>
+    
+    <div class="card-body">
+      <h5 class="card-title">{{ obj.title }}</h5>
+      <p class="card-text">{{ obj.text|truncatewords:15 }}.</p>
+      <a href="{{ obj.get_absolute_url }}" class="btn btn-primary">Go somewhere</a>
+      
+    </div>
+  </div> 
+</a>
+
+
+</div>
+
+
+{% endfor %}
+</div>
+
+</div>
+{% endblock %}
+<div class='container'>
+<hr>
+</div>

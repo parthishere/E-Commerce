@@ -1,0 +1,31 @@
+{% extends 'products/base.html' %}
+{% block body_block %}
+
+<div class='container'>
+
+
+<div class='row'>
+<center>
+<h1>{{ object.title }}</h1>
+<br>
+</center>
+
+<img src='{{ object.image.url }}' class='img-fluid img-thumbnail img-responsive'>
+
+{{ object.title }}
+
+{{ object.timestamp }}
+{{ object.price }}
+{{ object.dis_price }}
+{{ object.category }}
+{{ object.text }}
+
+
+<div class='col-12 col-md-6'>
+{% include 'snippets/cart.html' with object=object cart=cart %}	
+
+</div>
+</div>
+</div> 
+
+{% endblock %}
