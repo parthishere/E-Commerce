@@ -1,38 +1,27 @@
-{% extends 'products/base.html' %}
-
-
-
-
-{% block body_block %}
+{% extends 'products/base.html' %} {% block body_block %}
 <center>
-<div class='container'> 
-<div class='row'>
-{% for obj in object_list %}
+  <div class="container">
+    <div class="row">
+      {% for obj in object_list %}
 
-<div class='col-md-4 col-sm-6 col-lg-3'>
+      <div class="col-md-4 col-sm-6 col-lg-3">
+        <a class="card-link m-4" href="{{ obj.get_absolute_url }}">
+          <div class="card" style="width: 18rem">
+            <img src="{{ obj.image.url }}" height="134" width="238" />
 
-<a class='card-link m-4' href='{{ obj.get_absolute_url }}'>
-  
-  <div class="card" style="width: 18rem;" >
+            <div class="card-body">
+              <h5 class="card-title">{{ obj.title }}</h5>
+              <p class="card-text">{{ obj.text|truncatewords:15 }}.</p>
+              <a href="{{ obj.get_absolute_url }}" class="btn btn-primary"
+                >Go somewhere</a
+              >
+            </div>
+          </div>
+        </a>
+      </div>
 
-    <img src='{{ obj.image.url }}' height='134' width='238'>
-    
-    <div class="card-body">
-      <h5 class="card-title">{{ obj.title }}</h5>
-      <p class="card-text">{{ obj.text|truncatewords:15 }}.</p>
-      <a href="{{ obj.get_absolute_url }}" class="btn btn-primary">Go somewhere</a>
-      
+      {% endfor %}
     </div>
-  </div> 
-</a>
-
-
-</div>
-
-
-{% endfor %}
-</div>
-
-</div>
+  </div>
 </center>
 {% endblock %}
