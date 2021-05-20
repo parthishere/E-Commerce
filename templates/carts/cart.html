@@ -1,34 +1,41 @@
 {% extends 'products/base.html' %}
-<div class='container lp-4 lm-4'>
-{% block body_block %}
-<h1>Cart</h1>
+<div class="container lp-4 lm-4">
+  {% block body_block %}
+  <h1>Cart</h1>
+  {% if cart.item.exists %}
+  <table class="table">
+    <tbody>
+      {% for product in cart.item.all %}
+      <tr>
+        <th scope="row">
+          {{ product.title }} {% include 'snippets/cart.html' with object=product cart=cart %}
+        </th>
+        <td>{{ product.price }} Rs.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
 
-
-{% if objects.item.exists %}
-<table class="table">
- 
-  <tbody>
-  	{% for obj in objects.item.all %} 
     <tr>
-      <th scope="row">{{ obj.title }}   {% include 'snippets/cart.html' with object=object cart=cart %}</th>
-      <td>{{ obj.price }} Rs.</td>
+      <th></th>
     </tr>
-    {% endfor %}
-</tbody>
-<tr>
-	<th></th>
-</tr>
-   <tr>
-   	
-   	<th>Total</th>
-   	<th>{{ objects.total }} Rs.</th>
-   </tr>
-    
-  
-</table>
-{% else %}
-<h1>Cart is empty</h1>
-{% endif %}
-</div>
-{% endblock body_block %}
 
+    <tr>
+      <th>Total</th>
+      <th>{{ cart.total }} Rs.</th>
+    </tr>
+
+    <tr>
+      <th>
+        <form method="GET" action='{% url "cart:cart-checkout" %}'>
+          <input type="submit" value="Checkout" class="btn btn-primary" />
+        </form>
+      </th>
+    </tr>
+  </table>
+
+  {% else %}
+  <h1>Cart is empty</h1>
+  {% endif %}
+</div>
+
+{% endblock body_block %}

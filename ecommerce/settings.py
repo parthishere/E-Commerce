@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'search',
     'tags',
     'carts',
+    'orders',
 ]
 SITE_ID = 1
 
@@ -152,3 +153,5 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
     
 )
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

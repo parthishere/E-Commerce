@@ -11,6 +11,7 @@ class CartManager(models.Manager):
         cart_id = request.session.get('cart_id', None)
         qs = self.get_queryset().filter(id=cart_id)
         user_model = None
+        new_cart = False
         if qs.count() == 1 and qs.exists:
             cart_obj = qs.first()
             print("remeberd cart")
@@ -21,8 +22,9 @@ class CartManager(models.Manager):
         else:
             cart_obj = self.new(user=request.user)
             print("new cart created")
+            new_cart = True
             request.session['cart_id'] = cart_obj.id
-        return cart_obj
+        return cart_obj, new_cart   
 
 
     def new(self, user=None):
