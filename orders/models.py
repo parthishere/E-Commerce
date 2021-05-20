@@ -1,3 +1,5 @@
+import math
+
 from django.db import models
 from django.shortcuts import reverse, redirect
 from django.db.models.signals import pre_save, post_save, m2m_changed
@@ -80,7 +82,7 @@ class Order(models.Model):
     cart 				= models.ForeignKey(Cart, on_delete=models.CASCADE)
     status 				= models.CharField(choices=ORDER_STATUS_CHOICES, max_length=10, default='created')
     shipping_total		= models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True)
-    order_total 		= models.IntegerField(default=0)
+    order_total 		= models.DecimalField(decimal_places=2, max_digits=100, default=0.00)
     shipping_address 	= models.TextField(blank=True, null=True)
     billing_address 	= models.TextField(blank=True, null=True)
 
@@ -90,7 +92,8 @@ class Order(models.Model):
         return self.order_id
 
     def update_total(self):
-        self.order_total = self.shipping_total + self.cart.total
+        order_total = math.fsum([self.shipping_total + self.cart.total])
+        self.order_total = format(order_total, '.2f')
         new_total = self.order_total
         self.save()
         return new_total
