@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, reverse
 from products.models import Item
 from orders.models import Order
 from .models import Cart
+from allauth.account.forms import LoginForm
 
 # Create your views here.
 def cart_home(request):
@@ -41,4 +42,14 @@ def checkout_home(request):
         order_obj, new_order_obj = Order.objects.new_or_get(cart_obj)
     else:
         return redirect('cart:home')
-    return render(request, 'carts/checkout.html', context={ 'object': order_obj })
+    
+    user = request.user
+    biling_profile = None
+    login_form = LoginForm()
+    
+    context = {
+        'object': order_obj,
+        'billing_profile': biling_profile,
+        'form': login_form,
+    }
+    return render(request, 'carts/checkout.html', context=context)

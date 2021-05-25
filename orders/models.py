@@ -7,6 +7,7 @@ from django.db.models.signals import pre_save, post_save, m2m_changed
 from products.models import Item
 from carts.models import Cart
 from .utils import random_string_generator
+from billing.models import BillingProfile 
 
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
@@ -63,8 +64,7 @@ class OrderManager(models.Manager):
                     cart=cart_obj)
             created = True
         return obj, created
-            
-        return order_obj, new_order_obj
+
     
     def new(self, request):
         cart_id = request.session.get('cart_id', None)
@@ -78,13 +78,17 @@ class OrderManager(models.Manager):
 
 # Create your models here.
 class Order(models.Model):
+    billing_profile     = models.ForeignKey(BillingProfile, null=True, blank=True, on_delete=models.CASCADE)
     order_id 			= models.CharField(max_length=20)
     cart 				= models.ForeignKey(Cart, on_delete=models.CASCADE)
     status 				= models.CharField(choices=ORDER_STATUS_CHOICES, max_length=10, default='created')
-    shipping_total		= models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True)
+    shipping_total		= models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True, default=12.2)
     order_total 		= models.DecimalField(decimal_places=2, max_digits=100, default=0.00)
     shipping_address 	= models.TextField(blank=True, null=True)
     billing_address 	= models.TextField(blank=True, null=True)
+    active              = models.BooleanField(default=True)
+    updated             = models.DateTimeField(auto_now=True)
+    timestamp           = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     objects = OrderManager()
     
@@ -120,3 +124,13 @@ def post_save_cart_total(sender, instance, created, *args, **kwargs):
 
 post_save.connect(post_save_cart_total, sender=Cart)
 	
+ 
+ 
+def post_save_order(sender, instance, created, *args, **kwargs):
+    #print("running")
+    if created:
+        print("Updating... first")
+        instance.update_total()
+
+
+post_save.connect(post_save_order, sender=Order)

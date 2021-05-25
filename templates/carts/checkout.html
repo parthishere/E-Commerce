@@ -2,9 +2,12 @@
 
 {% block body_block %}
 
+{% if not billing_profile %}
+Login : {{ form }}
 
+{% else %}
 Cart Total:  {{ object.cart.total }}</br>
 Shipping Total : {{ object.order_total }}
-
+{% endif %}
 
 {% endblock %}
