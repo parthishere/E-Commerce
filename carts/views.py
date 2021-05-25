@@ -2,6 +2,7 @@ from django.http.response import Http404
 from django.shortcuts import render, redirect, reverse
 
 from products.models import Item
+from billing.models import BillingProfile
 from orders.models import Order
 from .models import Cart
 from allauth.account.forms import LoginForm
@@ -46,6 +47,9 @@ def checkout_home(request):
     user = request.user
     biling_profile = None
     login_form = LoginForm()
+    
+    if user.is_authenticated():
+        billing_profile = BillingProfile.object.new_or_get(request, email=user.email)
     
     context = {
         'object': order_obj,

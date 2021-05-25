@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.views.generic import (
     CreateView,
     TemplateView,
@@ -80,7 +80,15 @@ class CustomLogoutView(LogoutView):
         Using this instead of just defining the success_url attribute
         because our url has a dynamic element.
         """
-        return self.success_url
+        
+        next_ = self.request.POST.get('next')
+        next_get = self.request.GET.get('next')
+        
+        next_ = next_ or next_get
+        if next_ is not None:
+            return next_
+        else:
+            return self.success_url
 
 
 class CustomLogInView(LoginView):
@@ -92,8 +100,15 @@ class CustomLogInView(LoginView):
         Using this instead of just defining the success_url attribute
         because our url has a dynamic element.
         """
+        next_ = self.request.POST.get('next')
+        next_get = self.request.GET.get('next')
         
-        return self.success_url
+        next_ = next_ or next_get
+        if next_ is not None:
+            return next_
+        else:
+            return self.success_url
+
 
 
 class CustomSignUpView(SignupView):
@@ -106,4 +121,11 @@ class CustomSignUpView(SignupView):
         because our url has a dynamic element.
         """
         
-        return self.success_url
+        next_ = self.request.POST.get('next')
+        next_get = self.request.GET.get('next')
+        print(next_)
+        next_ = next_ or next_get
+        if next_ is not None:
+            return next_
+        else:
+            return self.success_url

@@ -3,7 +3,26 @@
 {% block body_block %}
 
 {% if not billing_profile %}
-Login : {{ form }}
+<table class='table-responsive md-12 center'>
+<tr class='row-cols-2'>    
+<th class='col-6 md-6'>
+{{ request.get_full_path }}
+{{ request.path }}
+Login :
+<form method='POST' action="{% url 'products:login' %}">
+{% csrf_token %}
+<input type='hidden' name='next' value="{{ request.build_absolute_uri }}" />
+{{ form.as_p }}
+<input type='submit' value='submit' name='submit' class='btn btn-primary'>
+</form>
+</th>
+
+<th class='col-12 md-6'>
+continue as guest
+</th>
+</tr>
+
+</table>
 
 {% else %}
 Cart Total:  {{ object.cart.total }}</br>

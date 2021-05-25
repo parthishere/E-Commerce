@@ -5,20 +5,20 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class BillingManager(models.Manager):
-    def new_or_get(self, request):
+    def new_or_get(self, request, email):
         user = request.user
         created = False
         qs = self.get_queryset().filter(user=user)
         if qs.exists():
             order_obj = qs.first()
         else:
-            order_obj = self.new(request=request)
+            order_obj = self.new(request=request, email=email)
             created = True
         return order_obj, created 
     
-    def new(self, request):
+    def new(self, request, email):
         if request.user.is_authenticated:
-            self.model.create(user=request.user)
+            self.model.create(user=request.user, email=email)
             self.save()
             
 
