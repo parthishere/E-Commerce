@@ -19,6 +19,12 @@ Login :
 
 <th class='col-12 md-6'>
 continue as guest
+<form method='POST' action="{% url 'acc:guest-login' %}">
+{% csrf_token %}
+<input type='hidden' name='next' value="{{ request.build_absolute_uri }}" />
+{{ guest_form.as_p }}
+<input type='submit' value='submit' name='submit' class='btn btn-primary'>
+</form>
 </th>
 </tr>
 

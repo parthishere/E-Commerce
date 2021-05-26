@@ -1,3 +1,4 @@
+from accounts.models import GuestEmail
 from django.http.response import Http404
 from django.shortcuts import render, redirect, reverse
 
@@ -5,6 +6,7 @@ from products.models import Item
 from billing.models import BillingProfile
 from orders.models import Order
 from .models import Cart
+from accounts.forms import GuestForm
 from allauth.account.forms import LoginForm
 
 # Create your views here.
@@ -47,13 +49,23 @@ def checkout_home(request):
     user = request.user
     biling_profile = None
     login_form = LoginForm()
+    guest_form = GuestForm()
+    guest_email_id =request.session.get('guest_id')
     
-    if user.is_authenticated():
-        billing_profile = BillingProfile.object.new_or_get(request, email=user.email)
+    if user.is_authenticated:
+        billing_profile = BillingProfile.objects.new_or_get(request, email=user.email)
+    
+    elif guest_email_id is not None:
+        guest_email_obj = GuestEmail.objects.get(id=guest_email_id)
+        billing_profile = BillingProfile.objects.new_or_get(email=guest_email_obj.email)
+        
+    else:
+        print('nothing found')
     
     context = {
         'object': order_obj,
-        'billing_profile': biling_profile,
+        'billing_profile': billing_profile,
         'form': login_form,
+        'guest_form': GuestForm,
     }
     return render(request, 'carts/checkout.html', context=context)

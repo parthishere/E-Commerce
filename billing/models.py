@@ -18,8 +18,7 @@ class BillingManager(models.Manager):
     
     def new(self, request, email):
         if request.user.is_authenticated:
-            self.model.create(user=request.user, email=email)
-            self.save()
+            self.model.objects.create(user=request.user, email=email)
             
 
 
@@ -29,6 +28,8 @@ class BillingProfile(models.Model):
     active = models.BooleanField(null=True, blank=True, default=True)
     timestamp = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     update = models.DateTimeField(auto_now=True)
+    
+    objects = BillingManager()
     
     def __str__(self):
         return self.email
