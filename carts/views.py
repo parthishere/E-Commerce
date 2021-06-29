@@ -47,7 +47,7 @@ def checkout_home(request):
         return redirect('cart:home')
     
     user = request.user
-    biling_profile = None
+    billing_profile = None
     login_form = LoginForm()
     guest_form = GuestForm()
     guest_email_id =request.session.get('guest_id')
@@ -61,6 +61,10 @@ def checkout_home(request):
         
     else:
         print('nothing found')
+        
+    order_qs = Order.objects.filter(cart=cart_obj, active=True)
+    if order_qs.exists():
+        order_qs.update(active=False)
     
     context = {
         'object': order_obj,

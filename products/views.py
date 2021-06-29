@@ -108,6 +108,9 @@ class CustomLogInView(LoginView):
             return next_
         else:
             return self.success_url
+        
+    def form_valid(self, form):
+        del self.request.session['guest_id']
 
 
 
